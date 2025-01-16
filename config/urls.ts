@@ -1,5 +1,5 @@
 export const client_url = {
-  base: "http://localhost:3000",
+  base: "https://reviews-hazel.vercel.app",
   login: "/api/login",
   register: "/api/register",
   logout: "/api/logout",
@@ -10,7 +10,7 @@ export const client_url = {
   sitesreview: "/api/site",
 };
 export const server_url = {
-  base: "http://localhost:8000",
+  base: "https://newreview.mydvls.com",
   //auth
   login: "/auth/signIn",
   register: "/auth/signUp",
