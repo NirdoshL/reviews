@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
     throw new Error("Something went wrong!!");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
+    console.log(err);
     return errorResponse(
       err?.response?.data?.message || "Something went wrong!!"
     );
