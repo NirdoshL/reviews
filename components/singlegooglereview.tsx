@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { client_url } from "@/config/urls";
 import apiClient from "@/config/axios/client.instance";
 import Loader from "./loader";
+import Link from "next/link";
 
 interface ReviewData {
   _id: string;
@@ -49,7 +50,7 @@ interface ViewActionProps {
 }
 export default function ReviewDialog({ id }: ViewActionProps) {
   const { isLoading: isLoading, data: singleReview } = useQuery({
-    queryKey: ["single-reviews"],
+    queryKey: ["single-reviews", id],
     queryFn: async () => {
       const { data } = await apiClient.get(client_url.reviews + "/" + id);
       return data as ReviewResponse;
@@ -74,6 +75,7 @@ export default function ReviewDialog({ id }: ViewActionProps) {
         </DialogHeader>
         <div className="mt-4 space-y-4 max-h-[75vh] overflow-y-auto pr-4">
           {singleReview &&
+            singleReview.data &&
             singleReview?.data?.map((review) => (
               <Card key={review._id}>
                 <CardContent className="pt-4">
@@ -97,6 +99,15 @@ export default function ReviewDialog({ id }: ViewActionProps) {
                           {review.relative_time_description}
                         </span>
                       </div>
+                    </div>
+                    <div>
+                      {review.author_url ? (
+                        <Button asChild className="bg-red-600 hover:bg-red-500">
+                          <Link target="_blank" href={review.author_url}>
+                            View
+                          </Link>
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
                   <p className="mt-2 text-sm text-gray-700">{review.text}</p>

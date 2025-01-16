@@ -13,18 +13,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Copy, CopySlash } from "lucide-react";
+import { Copy } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "@/config/axios/client.instance";
-import { FcGlobe, FcGoogle } from "react-icons/fc";
+import { FcGlobe } from "react-icons/fc";
 import { client_url } from "@/config/urls";
 
-import DeleteAction from "./deletereviews";
 import { toast } from "sonner";
-import ReviewDialog from "./singlegooglereview";
 import Errordata from "./errordata";
-import CreateActions from "./createreview";
 import Loader from "./loader";
+import SingleReviewDialog from "./singlesitereview";
+import SingleDeleteAction from "./singleSiteDeleteAction";
+import CreateSingleActions from "./createsinglereview";
 
 interface Review {
   _id: string;
@@ -57,15 +57,15 @@ interface ReviewResponse {
   data: ReviewData[];
 }
 
-export default function ResponsiveTable() {
+export default function SiteResponsiveTable() {
   const {
     isLoading: isLoading,
     data: tableData,
     isError,
   } = useQuery({
-    queryKey: ["reviews"],
+    queryKey: ["site-reviews"],
     queryFn: async () => {
-      const { data } = await apiClient.get(client_url.reviews);
+      const { data } = await apiClient.get(client_url.sitesreview);
       return data as ReviewResponse;
     },
     retry: false,
@@ -75,19 +75,10 @@ export default function ResponsiveTable() {
 
   const handleCopyLink = (id: string) => {
     navigator.clipboard.writeText(
-      `${process.env.NEXT_PUBLIC_BASE_API_URL}/reviews/${id}`
-    );
-    toast.success("Link copied", {
-      description: "Google Review link copied to clipboard.",
-    });
-  };
-
-  const handleCopySiteLink = (id: string) => {
-    navigator.clipboard.writeText(
       `${process.env.NEXT_PUBLIC_BASE_API_URL}/site/reviews/${id}`
     );
     toast.success("Link copied", {
-      description: "Site Review link copied to clipboard.",
+      description: "Google Review link copied to clipboard.",
     });
   };
 
@@ -99,7 +90,7 @@ export default function ResponsiveTable() {
   }
   return (
     <div className="container mx-auto py-10">
-      <CreateActions />
+      <CreateSingleActions />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -119,12 +110,11 @@ export default function ResponsiveTable() {
                   <TableCell className="font-medium">{item._id}</TableCell>
                   <TableCell>{item.sitename}</TableCell>
                   <TableCell className="flex gap-2 items-center">
-                    {item.data.length} -<FcGoogle /> |{" "}
-                    {item.site.data.length ?? "0"}
+                    {item.data.length}
                     -<FcGlobe />
                   </TableCell>
                   <TableCell className="text-right">
-                    <ReviewDialog id={item._id} />
+                    <SingleReviewDialog id={item._id} />
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -138,22 +128,8 @@ export default function ResponsiveTable() {
                         </TooltipTrigger>
                       </Tooltip>
                     </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() =>
-                              handleCopySiteLink(item.site._id ?? "")
-                            }
-                          >
-                            <CopySlash className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <DeleteAction id={item._id} />
+
+                    <SingleDeleteAction id={item._id} />
                   </TableCell>
                 </TableRow>
               ))}

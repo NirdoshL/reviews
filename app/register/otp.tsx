@@ -88,7 +88,7 @@ export default function InputOTPForm({ open, setOpen }: inputotpprops) {
       <DialogContent className="max-w-[300px] sm:max-w-md rounded-xl flex flex-col justify-center items-center mx-auto">
         <DialogHeader>
           <DialogTitle className="text-center">Enter OTP</DialogTitle>
-          <DialogDescription>Please enter the 6-digit OTP.</DialogDescription>
+          <DialogDescription>Please enter the 4-digit OTP.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -114,7 +114,7 @@ export default function InputOTPForm({ open, setOpen }: inputotpprops) {
                     </InputOTP>
                   </FormControl>
                   <FormDescription className="text-xs">
-                    Please enter the one-time password sent to your email.
+                    Ask Nirdosh for OTP.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

@@ -10,6 +10,8 @@ export function useUser() {
   return useQuery({
     queryKey: ["user"],
     queryFn: () => authApi.retrieveUser().then((res) => res.data),
-    retry: false,
+    retry: true,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 }

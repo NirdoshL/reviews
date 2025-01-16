@@ -13,17 +13,17 @@ export async function GET(
     const user = userCookie?.value;
     const { id } = await params;
 
-    const { data } = await apiServer.get(server_url.reviews + "/all/" + id, {
-      headers: {
-        Authorization: `Bearer ${user}`,
-      },
-    });
+    const { data } = await apiServer.get(
+      server_url.sitesreview + "/sites/" + id,
+      {
+        headers: {
+          Authorization: `Bearer ${user}`,
+        },
+      }
+    );
+    console.log(data);
     if (data) {
-      return successResponse(
-        "Review Fetched Sucessfully!!",
-        200,
-        data.data || []
-      );
+      return successResponse("Review Fetched Sucessfully!!", 200, data || []);
     }
     throw new Error("Something went wrong!!");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +44,7 @@ export async function DELETE(
     const user = userCookie?.value;
     const { id } = await params;
 
-    const { data } = await apiServer.delete(server_url.reviews + "/" + id, {
+    const { data } = await apiServer.delete(server_url.sitesreview + "/" + id, {
       headers: {
         Authorization: `Bearer ${user}`,
       },

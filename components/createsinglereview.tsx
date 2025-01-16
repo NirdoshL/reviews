@@ -10,37 +10,38 @@ import apiClient from "@/config/axios/client.instance";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { queryClient } from "@/providers/reactquery.provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { reviewSchema, reviewSchemaType } from "@/types/auth/review";
 import { Label } from "./ui/label";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { AxiosError } from "axios";
+import {
+  singleReviewSchema,
+  singleReviewSchemaType,
+} from "@/types/auth/singlereview";
 
 interface CreateActionsProps {
   onSuccess?: () => void;
 }
-export default function CreateActions({ onSuccess }: CreateActionsProps) {
-  const form = useForm<reviewSchemaType>({
-    resolver: zodResolver(reviewSchema),
+export default function CreateSingleActions({ onSuccess }: CreateActionsProps) {
+  const form = useForm<singleReviewSchemaType>({
+    resolver: zodResolver(singleReviewSchema),
     defaultValues: {
       sitename: "",
-      placeid: "",
     },
   });
   const { mutate: handleCreate, isPending: isCreatePending } = useMutation<
     Response,
     AxiosError,
-    reviewSchemaType
+    singleReviewSchemaType
   >({
-    mutationFn: async (value: reviewSchemaType) => {
-      const response = await apiClient.post(client_url.reviews, { ...value });
+    mutationFn: async (value: singleReviewSchemaType) => {
+      const response = await apiClient.post(client_url.sitesreview, {
+        ...value,
+      });
       return response.data;
     },
     onSuccess: () => {
       toast.success("Reviews created successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["reviews"],
-      });
       queryClient.invalidateQueries({
         queryKey: ["site-reviews"],
       });
@@ -65,15 +66,17 @@ export default function CreateActions({ onSuccess }: CreateActionsProps) {
     <Dialog>
       <DialogTrigger className="my-4">
         <span className="p-2 bg-green-500 text-white rounded-sm my-4">
-          Create Review
+          Create Site For Review
         </span>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Add new restaurant for reviews</DialogTitle>
+        <DialogTitle>
+          Add new restaurant for reviews(Only for Site Menu)
+        </DialogTitle>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(
-              handleCreate as SubmitHandler<reviewSchemaType>
+              handleCreate as SubmitHandler<singleReviewSchemaType>
             )}
             className="w-full flex flex-col gap-5 mx-auto"
           >
@@ -91,28 +94,6 @@ export default function CreateActions({ onSuccess }: CreateActionsProps) {
                         <Input
                           type="text"
                           placeholder="Enter Site Name"
-                          className="w-full px-3 py-2 border rounded-md"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="placeid" className="text-gray-700">
-                  Place ID
-                </Label>
-                <FormField
-                  control={form.control}
-                  name="placeid"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Enter Google Place ID"
                           className="w-full px-3 py-2 border rounded-md"
                           {...field}
                         />

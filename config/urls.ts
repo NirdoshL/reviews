@@ -7,6 +7,7 @@ export const client_url = {
   me: "/api/me",
   users: "/api/users",
   reviews: "/api/reviews",
+  sitesreview: "/api/site",
 };
 export const server_url = {
   base: "http://localhost:8000",
@@ -19,4 +20,5 @@ export const server_url = {
   users: "/auth/users",
   //reviews
   reviews: "/reviews",
+  sitesreview: "/site/reviews",
 };

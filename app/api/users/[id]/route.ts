@@ -11,7 +11,7 @@ export async function GET(
   try {
     const userCookie = request.cookies.get("access");
     const user = userCookie?.value;
-    const { id } = params;
+    const { id } = await params;
 
     const { data } = await apiServer.get(server_url.users + "/disable/" + id, {
       headers: {
@@ -41,7 +41,7 @@ export async function POST(
   try {
     const userCookie = request.cookies.get("access");
     const user = userCookie?.value;
-    const { id } = params;
+    const { id } = await params;
 
     const { data } = await apiServer.get(server_url.users + "/enable/" + id, {
       headers: {
